@@ -136,7 +136,7 @@ public class UtilisateurManagmentService {
             loginResponse.setStatusCode(200);
             loginResponse.setToken(jwt);
             //loginResponse.setRefreshToken(refreshToken);
-            loginResponse.setRole(utilisateur1.getRole()); //to be able to know the role in the front end
+            loginResponse.setRole(utilisateur1.getRole()); //to be able to know the role in the front end and manipulate routing
             loginRequest.setExp("24Hrs");
             loginResponse.setMessage("User logged in successfully");
         }catch (Exception e) {
