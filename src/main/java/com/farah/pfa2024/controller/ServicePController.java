@@ -1,11 +1,7 @@
 package com.farah.pfa2024.controller;
 
 import com.farah.pfa2024.dto.ReqResponse;
-import com.farah.pfa2024.model.Prestataire;
-import com.farah.pfa2024.model.ServiceP;
-import com.farah.pfa2024.service.PrestataireService;
 import com.farah.pfa2024.service.ServicePService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +16,12 @@ public class ServicePController {
     @Autowired
     public ServicePController(ServicePService servicePService) {
         this.servicePService = servicePService;
+    }
+
+    @GetMapping
+    public ResponseEntity<ReqResponse> getAllServices() {
+        ReqResponse response =servicePService.getAllServices();
+        return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
     @GetMapping("/{id_ser}")

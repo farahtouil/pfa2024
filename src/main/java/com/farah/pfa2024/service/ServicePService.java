@@ -22,6 +22,26 @@ public class ServicePService {
         this.servicePRepository = servicePRepository;
     }
 
+    public ReqResponse getAllServices() {
+        ReqResponse reqResponse = new ReqResponse();
+        try {
+            List<ServiceP> services = servicePRepository.findAll();
+            if (!services.isEmpty()) {
+                reqResponse.setStatusCode(200);
+                reqResponse.setMessage("Tous les services récupérés avec succès");
+                reqResponse.setServicePs(services);
+            } else {
+                reqResponse.setStatusCode(204);  // No Content
+                reqResponse.setMessage("Aucun service trouvé");
+            }
+        } catch (Exception e) {
+            reqResponse.setStatusCode(500);
+            reqResponse.setMessage("Erreur lors de la récupération des services: " + e.getMessage());
+        }
+        return reqResponse;
+    }
+
+
     public ReqResponse getServicePById(Long id_ser) {
         ReqResponse reqResponse = new ReqResponse();
 
