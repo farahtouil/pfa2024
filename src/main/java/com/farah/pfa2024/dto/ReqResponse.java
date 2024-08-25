@@ -34,7 +34,7 @@ public class ReqResponse {
     private String image;
     private Role role;
     private List<Utilisateur> utilisateurs;
-    private List<ServiceP> servicePs;
+    private List<ServicePWithPrestataireDTO> servicePs;
     private List<Admin> admins;
     private List<Client> clients;
     private List<Prestataire> prestataires;

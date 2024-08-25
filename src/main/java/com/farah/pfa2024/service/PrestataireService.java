@@ -1,6 +1,7 @@
 package com.farah.pfa2024.service;
 
 import com.farah.pfa2024.dto.ReqResponse;
+import com.farah.pfa2024.dto.ServicePWithPrestataireDTO;
 import com.farah.pfa2024.model.Prestataire;
 import com.farah.pfa2024.model.ServiceP;
 import com.farah.pfa2024.repository.PrestataireRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PrestataireService {
@@ -111,6 +113,7 @@ public class PrestataireService {
                 Prestataire prestataire = prestataireOpt.get();
                 serviceP.setPrestataire(prestataire);    // Link service to the prestataire
                 servicePRepository.save(serviceP);
+
                 Set<ServiceP> servicesP = prestataire.getServicesP();
                 if (servicesP == null) {
                     servicesP = new HashSet<>();
@@ -119,21 +122,25 @@ public class PrestataireService {
                 prestataire.setServicesP(servicesP);
                 prestataireRepository.save(prestataire);
 
+                // Convert services to DTO
+                List<ServicePWithPrestataireDTO> serviceDTOs = servicesP.stream()
+                        .map(ServicePWithPrestataireDTO::new)
+                        .collect(Collectors.toList());
+
                 reqResponse.setStatusCode(201);
                 reqResponse.setMessage("Service ajouté au prestataire avec succès");
-
-                List<ServiceP> servicesPList = new ArrayList<>(servicesP);
-                reqResponse.setServicePs(servicesPList);
-            }else {
+                reqResponse.setServicePs(serviceDTOs);  // Use DTO
+            } else {
                 reqResponse.setStatusCode(404);
                 reqResponse.setMessage("Prestataire n'existe pas");
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             reqResponse.setStatusCode(500);
             reqResponse.setMessage("Erreur lors de l'ajout du service au prestataire: " + e.getMessage());
         }
         return reqResponse;
     }
+
 
     public ReqResponse updateServicePForPrestataire(Long id_pres, ServiceP serviceP) {
         ReqResponse reqResponse = new ReqResponse();

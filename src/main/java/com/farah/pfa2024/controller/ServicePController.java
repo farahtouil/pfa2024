@@ -1,6 +1,7 @@
 package com.farah.pfa2024.controller;
 
 import com.farah.pfa2024.dto.ReqResponse;
+import com.farah.pfa2024.model.TypeS;
 import com.farah.pfa2024.service.ServicePService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,12 @@ public class ServicePController {
     @PutMapping("/{id_ser}")
     public ResponseEntity<ReqResponse> updateService(@PathVariable Long id_ser, @RequestBody Double newPrice) {
         ReqResponse response = servicePService.updateService(id_ser, newPrice);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
+    @GetMapping("/type/{type}")
+    public ResponseEntity<ReqResponse> getServicePByType(@PathVariable TypeS type) {//@RequestParam is used for query parameters, not path variables.
+        ReqResponse response = servicePService.getServicePByType(type);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
