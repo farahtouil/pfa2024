@@ -16,6 +16,10 @@ import java.util.List;
 @DiscriminatorValue("client")
 public class Client extends Utilisateur implements Serializable {
 
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "client-reservation")
+    private List<Reservation> reservations;
+
 
 
     public Client(Long id_user, String nom, String prenom, String num_tel, String gouvernorat, String mail, String mdp) {

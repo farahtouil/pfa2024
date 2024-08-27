@@ -38,11 +38,12 @@ public class SecurityConfig {
                 .requestMatchers("/privileges/**").hasAnyAuthority("READ_PRIVILEGES", "WRITE_PRIVILEGES")  // checks for either READ_PRIVILEGES or WRITE_PRIVILEGES
 
 */
-                .authorizeHttpRequests(request->request.requestMatchers("/auth/**","/public/**").permitAll()
+                .authorizeHttpRequests(request->request.requestMatchers("/auth/**","/public/**","reservations/**").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("admin")
                         .requestMatchers("/prestataire/**").hasAnyAuthority("prestataire", "admin")
                         .requestMatchers("/client/**").hasAnyAuthority("client","admin")
                         .requestMatchers("/service/**").hasAnyAuthority("prestataire","admin","client")
+                        /*.requestMatchers("reservations/**").hasAnyAuthority("prestataire","admin","client")*/
                         .anyRequest().authenticated())
                 .sessionManagement(manager->manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //the server doesn't store the session data
                 .authenticationProvider(authenticationProvider()).addFilterBefore(

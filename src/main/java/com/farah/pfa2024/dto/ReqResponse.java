@@ -42,6 +42,8 @@ public class ReqResponse {
     private Client client;
     private Prestataire prestataire;
     private ServiceP serviceP1;
+    private List<Reservation> reservations;
+    private Reservation reservation;
 
 
 }
