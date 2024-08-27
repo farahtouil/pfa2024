@@ -9,6 +9,8 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
+
+
 @Entity
 @Getter
 @Setter
@@ -27,4 +29,7 @@ public class ServiceP implements Serializable {
     @JoinColumn(name = "prestataire_id")
     @JsonBackReference
     private Prestataire prestataire;
+
+
+
 }
