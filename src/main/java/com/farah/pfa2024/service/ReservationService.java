@@ -77,13 +77,26 @@ public class ReservationService {
             ServiceP serviceP = servicePRepository.findById(reservationDTO.getService().getId_ser())
                     .orElseThrow(() -> new RuntimeException("Service not found"));
 
+            int heureDep = reservationDTO.getHeure_dep().toLocalTime().getHour();
+            int heureFin = reservationDTO.getHeure_fin().toLocalTime().getHour();
+
+            int durationService = heureFin - heureDep;
+
+
+            double prixTot = durationService * serviceP.getPrixparH();
+
+            if (durationService <= 0) {
+                throw new RuntimeException("Invalid time range: heure_fin should be greater than heure_dep");
+            }
+
+
             Reservation reservation = new Reservation();
             reservation.setClient(client);
             reservation.setService(serviceP);
             reservation.setStatut(reservationDTO.getStatut());
             reservation.setHeure_dep(reservationDTO.getHeure_dep());
             reservation.setHeure_fin(reservationDTO.getHeure_fin());
-            reservation.setPrix(reservationDTO.getPrix());
+            reservation.setPrix(prixTot);
             reservation.setDate_unique(reservationDTO.getDate_unique());
 
             Reservation savedReservation = reservationRepository.save(reservation);
