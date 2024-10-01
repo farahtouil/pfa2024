@@ -23,7 +23,6 @@ public class ServicePWithPrestataireDTO {
         this.prestataire = new PrestataireDTO(serviceP.getPrestataire());
     }
 
-    // Getters and Setters
-    // ...
+
 }
 

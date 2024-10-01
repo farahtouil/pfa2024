@@ -19,7 +19,7 @@ public class Reservation implements Serializable {
     private Long id_res;
 
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id_client")
     @JsonBackReference(value = "client-reservation")
     private Client client;
 

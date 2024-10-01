@@ -43,7 +43,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         user_id = jwtUtils.extractUserId(jwtToken);
 
         if (user_id != null && SecurityContextHolder.getContext().getAuthentication()==null) {//This condition checks if the userMail is not null and if the security context does not already contain an authentication object.
-            UserDetails userDetails = utilisateurDetService.loadUserByUsername(user_id.toString());
+            UserDetails userDetails = utilisateurDetService.loadUserByUsername(user_id.toString() );
 
             if (jwtUtils.isTokenValid(jwtToken, userDetails)) { //If authentication is successful, an Authentication object is created and set in the SecurityContext.
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
