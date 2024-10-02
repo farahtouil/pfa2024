@@ -2,10 +2,7 @@ package com.farah.pfa2024.service;
 
 import com.farah.pfa2024.dto.ReqResponse;
 import com.farah.pfa2024.dto.ReservationDTO;
-import com.farah.pfa2024.model.Client;
-import com.farah.pfa2024.model.Prestataire;
-import com.farah.pfa2024.model.Reservation;
-import com.farah.pfa2024.model.ServiceP;
+import com.farah.pfa2024.model.*;
 import com.farah.pfa2024.repository.ClientRepository;
 import com.farah.pfa2024.repository.ReservationRepository;
 import com.farah.pfa2024.repository.ServicePRepository;
@@ -49,10 +46,10 @@ public class ReservationService {
     }
 
     // Fetch all reservations for a specific prestataire
-    /*public ReqResponse getReservationsByPrestataire(Prestataire prestataire) {
+    public ReqResponse getReservationsByPrestataire(Prestataire prestataire) {
         ReqResponse reqResponse = new ReqResponse();
         try {
-            List<Reservation> reservations = reservationRepository.findByPrestataire(prestataire);
+            List<Reservation> reservations = reservationRepository.findByServicePrestataire(prestataire);
             if (!reservations.isEmpty()) {
                 reqResponse.setStatusCode(200);
                 reqResponse.setMessage("Reservations for prestataire retrieved successfully");
@@ -66,7 +63,7 @@ public class ReservationService {
             reqResponse.setMessage("Error retrieving reservations for prestataire: " + e.getMessage());
         }
         return reqResponse;
-    }*/
+    }
 
     // Create a new reservation
     public ReqResponse createReservation(ReservationDTO reservationDTO) {
@@ -126,6 +123,49 @@ public class ReservationService {
         } catch (Exception e) {
             reqResponse.setStatusCode(500);
             reqResponse.setMessage("Error deleting reservation: " + e.getMessage());
+        }
+        return reqResponse;
+    }
+
+    //Accept or reject a reservation
+    public ReqResponse updateReservation(Long id_res, ReservationDTO reservationDTO) {
+        ReqResponse reqResponse = new ReqResponse();
+        try {
+            Reservation reservation = reservationRepository.findById(id_res)
+                    .orElseThrow(() -> new RuntimeException("Reservation not found"));
+
+            if (reservation.getStatut()== Stat.en_attente) {
+                if (reservationDTO.getStatut()== null) {
+                    reqResponse.setStatusCode(400);
+                    reqResponse.setMessage("Statut is null");
+                    return reqResponse;
+                }
+
+                switch (reservationDTO.getStatut()) {
+                    case confirmee:
+                        reservation.setStatut(Stat.confirmee);
+                        break;
+                    case refusee:
+                        reservation.setStatut(Stat.refusee);
+                        break;
+                    default:
+                        reqResponse.setStatusCode(400);  // Bad Request
+                        reqResponse.setMessage("Invalid status. Please use 'confirmee' or 'refusee'.");
+                        return reqResponse;
+                }
+
+                Reservation savedReservation = reservationRepository.save(reservation);
+
+                reqResponse.setStatusCode(200);
+                reqResponse.setMessage("Reservation status updated successfully");
+                reqResponse.setReservation(savedReservation);
+            }else {
+                reqResponse.setStatusCode(400);
+                reqResponse.setMessage("Reservation status can only be updated if it is 'en attente'.");
+            }
+        }catch (Exception e) {
+            reqResponse.setStatusCode(500);
+            reqResponse.setMessage("Error updating reservation: " + e.getMessage());
         }
         return reqResponse;
     }

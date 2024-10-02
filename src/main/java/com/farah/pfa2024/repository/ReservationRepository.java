@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     List<Reservation> findByClient(Client client);
-    /*List<Reservation> findByPrestataire(Prestataire prestataire);*/
+    List<Reservation> findByServicePrestataire(Prestataire prestataire);
 
 }

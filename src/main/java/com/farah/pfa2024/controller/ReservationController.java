@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
+//c'est testé
 @RestController
 @RequestMapping("/reservations")
 public class ReservationController {
@@ -30,13 +33,13 @@ public class ReservationController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    /*@GetMapping("/prestataire/{id_pres}")
+    @GetMapping("/prestataire/{id_pres}")
     public ResponseEntity<ReqResponse> getReservationsByPrestataire(@PathVariable Long id_pres) {
         Prestataire prestataire = new Prestataire();  // This should be fetched from the database
         prestataire.setId_user(id_pres);
         ReqResponse response = reservationService.getReservationsByPrestataire(prestataire);
         return ResponseEntity.status(response.getStatusCode()).body(response);
-    }*/
+    }
 
     @PostMapping
     public ResponseEntity<ReqResponse> createReservation(@RequestBody ReservationDTO reservation) {
@@ -49,4 +52,11 @@ public class ReservationController {
         ReqResponse response = reservationService.deleteReservation(id_res);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
+
+    @PutMapping("/{id_res}/status")
+    public ResponseEntity<ReqResponse> updateReservationStatus(@PathVariable Long id_res, @RequestBody ReservationDTO reservationDTO) {
+        ReqResponse response = reservationService.updateReservation(id_res, reservationDTO);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
 }
