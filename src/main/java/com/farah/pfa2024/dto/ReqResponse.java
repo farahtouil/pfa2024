@@ -44,6 +44,7 @@ public class ReqResponse {
     private ServiceP serviceP1;
     private List<Reservation> reservations;
     private Reservation reservation;
+    private List<ReservationDTO> reservationDTOs;
 
 
 }

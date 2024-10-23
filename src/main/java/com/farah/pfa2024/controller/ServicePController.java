@@ -45,13 +45,8 @@ public class ServicePController {
 
 
 
-   /* @GetMapping("/{id_ser}")
-    public ResponseEntity<ServiceP> getServicePById(@PathVariable Long id_ser) {
-        Optional<ServiceP> serviceP = servicePService.getServicePById(id_ser);
-        return serviceP.isPresent() ? ResponseEntity.ok(serviceP.get()) : ResponseEntity.notFound().build();
-    }
 
-    @PostMapping("/{id_pres}")
+    /*@PostMapping("/{id_pres}")
     /*public ResponseEntity<ServiceP> createServiceP(@RequestBody ServiceP serviceP) {
         ServiceP createdServiceP = servicePService.addServiceP(serviceP);
         return ResponseEntity.status(201).body(createdServiceP);

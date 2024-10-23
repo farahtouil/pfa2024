@@ -22,6 +22,9 @@ public class ReservationDTO {
     private Time heure_fin;
     private Double prix;
     private Date date_unique;
+    private Long id_client;
+    private Long id_res;
+
 
 
 }

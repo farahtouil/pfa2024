@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
@@ -17,6 +18,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final ClientRepository clientRepository;
     private final ServicePRepository servicePRepository;
+    private java.util.stream.Collectors Collectors;
 
     @Autowired
     public ReservationService(ReservationRepository reservationRepository, ClientRepository clientRepository, ServicePRepository servicePRepository) {
@@ -33,7 +35,27 @@ public class ReservationService {
             if (!reservations.isEmpty()) {
                 reqResponse.setStatusCode(200);
                 reqResponse.setMessage("Reservations for client retrieved successfully");
-                reqResponse.setReservations(reservations);  // Set list of reservations in the response
+                //reqResponse.setReservations(reservations);  // Set list of reservations in the response
+
+                List<ReservationDTO> reservationDTOs = reservations.stream().map(reservation -> {
+                    ReservationDTO dto = new ReservationDTO();
+                    dto.setStatut(reservation.getStatut());
+                    dto.setHeure_dep(reservation.getHeure_dep());
+                    dto.setHeure_fin(reservation.getHeure_fin());
+                    dto.setPrix(reservation.getPrix());
+                    dto.setDate_unique(reservation.getDate_unique());
+                    dto.setService(reservation.getService());
+                    dto.setId_res(reservation.getId_res());
+
+                    if (reservation.getClient() != null) {
+                        dto.setClient(reservation.getClient());
+                        dto.setId_client(reservation.getClient().getId_user()); // Set the client ID
+                    }
+
+                    return dto;
+                }).collect(Collectors.toList());
+                reqResponse.setReservationDTOs(reservationDTOs);
+
             } else {
                 reqResponse.setStatusCode(204);  // No Content
                 reqResponse.setMessage("No reservations found for the client");
@@ -53,7 +75,27 @@ public class ReservationService {
             if (!reservations.isEmpty()) {
                 reqResponse.setStatusCode(200);
                 reqResponse.setMessage("Reservations for prestataire retrieved successfully");
-                reqResponse.setReservations(reservations);  // Set list of reservations in the response
+                //reqResponse.setReservations(reservations);  // Set list of reservations in the response
+
+                List<ReservationDTO> reservationDTOs = reservations.stream().map(reservation -> {
+                    ReservationDTO dto = new ReservationDTO();
+                    dto.setStatut(reservation.getStatut());
+                    dto.setHeure_dep(reservation.getHeure_dep());
+                    dto.setHeure_fin(reservation.getHeure_fin());
+                    dto.setPrix(reservation.getPrix());
+                    dto.setDate_unique(reservation.getDate_unique());
+                    dto.setService(reservation.getService());
+                    dto.setId_res(reservation.getId_res());
+
+                    if (reservation.getClient() != null) {
+                        dto.setClient(reservation.getClient());
+                        dto.setId_client(reservation.getClient().getId_user()); // Set the client ID
+                    }
+
+                    return dto;
+                }).collect(Collectors.toList());
+                reqResponse.setReservationDTOs(reservationDTOs);
+
             } else {
                 reqResponse.setStatusCode(204);  // No Content
                 reqResponse.setMessage("No reservations found for the prestataire");
@@ -95,6 +137,7 @@ public class ReservationService {
             reservation.setHeure_fin(reservationDTO.getHeure_fin());
             reservation.setPrix(prixTot);
             reservation.setDate_unique(reservationDTO.getDate_unique());
+
 
             Reservation savedReservation = reservationRepository.save(reservation);
             reqResponse.setStatusCode(201);
